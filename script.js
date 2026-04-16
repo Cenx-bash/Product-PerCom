@@ -1,374 +1,321 @@
-/* ============================================================
-   AROMA TEA HOUSE - MAIN SCRIPT
-   Handles: navigation scroll state, mobile menu, cart drawer,
-            product filtering, newsletter form, toast notifications,
-            and scroll-reveal animations.
-   ============================================================ */
+// Tea Data
+const teasData = [
+  {
+    id: 1,
+    name: "Ceremonial Matcha",
+    origin: "Uji, Japan",
+    desc: "Stone-ground from shade-grown tencha. Vivid umami with a smooth finish.",
+    price: 28.0,
+    category: "green",
+    badge: "Bestseller",
+    imgClass: "tea-card__img--matcha",
+  },
+  {
+    id: 2,
+    name: "Rock Oolong",
+    origin: "Wuyi Mountains, China",
+    desc: "Aged on mineral-rich cliffs. Deep roasted notes with honeyed sweetness.",
+    price: 34.0,
+    category: "green",
+    badge: null,
+    imgClass: "tea-card__img--oolong",
+  },
+  {
+    id: 3,
+    name: "First Flush Sencha",
+    origin: "Shizuoka, Japan",
+    desc: "Harvested in early spring. Crisp, grassy brightness with clean finish.",
+    price: 22.0,
+    category: "green",
+    badge: "New",
+    imgClass: "tea-card__img--sencha",
+  },
+  {
+    id: 4,
+    name: "Vintage Pu-erh",
+    origin: "Yunnan, China",
+    desc: "Aged for ten years in humid caves. Earthy, deep, and profoundly complex.",
+    price: 48.0,
+    category: "aged",
+    badge: null,
+    imgClass: "tea-card__img--puerh",
+  },
+  {
+    id: 5,
+    name: "Wild Chamomile",
+    origin: "Thessaly, Greece",
+    desc: "Hand-picked from mountain meadows. Soft apple notes with calming warmth.",
+    price: 18.0,
+    category: "herbal",
+    badge: null,
+    imgClass: "tea-card__img--chamomile",
+  },
+  {
+    id: 6,
+    name: "Earl Grey Reserve",
+    origin: "Assam, India",
+    desc: "Bold Assam base infused with hand-pressed bergamot oil.",
+    price: 24.0,
+    category: "black",
+    badge: null,
+    imgClass: "tea-card__img--earlgrey",
+  },
+  {
+    id: 7,
+    name: "Gyokuro Shade",
+    origin: "Yame, Japan",
+    desc: "Shaded for six weeks before harvest. Intensely sweet with savory character.",
+    price: 52.0,
+    category: "green",
+    badge: "Rare",
+    imgClass: "tea-card__img--gyokuro",
+  },
+  {
+    id: 8,
+    name: "Darjeeling Second Flush",
+    origin: "Darjeeling, India",
+    desc: "The champagne of teas. Muscatel grape notes with lingering complexity.",
+    price: 38.0,
+    category: "black",
+    badge: null,
+    imgClass: "tea-card__img--darjeeling",
+  },
+];
 
-(function () {
-  "use strict";
+// Cart State
+let cart = JSON.parse(localStorage.getItem("teaCart")) || [];
 
-  /* ----------------------------------------------------------
-     1. DOM References
-     ---------------------------------------------------------- */
-  const nav            = document.getElementById("nav");
-  const hamburger      = document.getElementById("hamburger");
-  const mobileMenu     = document.getElementById("mobileMenu");
-  const mobileLinks    = document.querySelectorAll(".mobile-menu__link");
+// DOM Elements
+const teaGrid = document.getElementById("teaGrid");
+const filterBtns = document.querySelectorAll(".filter-btn");
+const cartBtn = document.getElementById("cartBtn");
+const cartDrawer = document.getElementById("cartDrawer");
+const cartOverlay = document.getElementById("cartOverlay");
+const cartClose = document.getElementById("cartClose");
+const cartList = document.getElementById("cartList");
+const cartTotal = document.getElementById("cartTotal");
+const cartCount = document.getElementById("cartCount");
+const toast = document.getElementById("toast");
+const hamburger = document.getElementById("hamburger");
+const mobileMenu = document.getElementById("mobileMenu");
+const newsletterForm = document.getElementById("newsletterForm");
 
-  const cartBtn        = document.getElementById("cartBtn");
-  const cartCount      = document.getElementById("cartCount");
-  const cartClose      = document.getElementById("cartClose");
-  const cartDrawer     = document.getElementById("cartDrawer");
-  const cartOverlay    = document.getElementById("cartOverlay");
-  const cartList       = document.getElementById("cartList");
-  const cartTotal      = document.getElementById("cartTotal");
+// Render Tea Grid
+function renderTeas(filter = "all") {
+  const filtered =
+    filter === "all" ? teasData : (
+      teasData.filter((tea) => tea.category === filter)
+    );
 
-  const addButtons     = document.querySelectorAll(".btn-add");
-  const filterButtons  = document.querySelectorAll(".filter-btn");
-  const teaCards       = document.querySelectorAll(".tea-card");
+  teaGrid.innerHTML = filtered
+    .map(
+      (tea) => `
+    <article class="tea-card" data-category="${tea.category}">
+      <div class="tea-card__img-wrap">
+        <div class="tea-card__img ${tea.imgClass}"></div>
+        ${tea.badge ? `<span class="tea-card__badge">${tea.badge}</span>` : ""}
+      </div>
+      <div class="tea-card__body">
+        <p class="tea-card__origin">${tea.origin}</p>
+        <h3 class="tea-card__name">${tea.name}</h3>
+        <p class="tea-card__desc">${tea.desc}</p>
+        <div class="tea-card__footer">
+          <span class="tea-card__price">$${tea.price.toFixed(2)}</span>
+          <button class="btn-add" data-id="${tea.id}" data-name="${tea.name}" data-price="${tea.price}">Add to Cart</button>
+        </div>
+      </div>
+    </article>
+  `,
+    )
+    .join("");
 
-  const newsletterForm = document.getElementById("newsletterForm");
-  const emailInput     = document.getElementById("emailInput");
-  const formMessage    = document.getElementById("formMessage");
-
-  const toast          = document.getElementById("toast");
-
-  /* ----------------------------------------------------------
-     2. State
-     ---------------------------------------------------------- */
-  let cart      = [];       // Array of { name, price, qty } objects
-  let toastTimer = null;    // Reference for clearing the toast timeout
-
-  /* ----------------------------------------------------------
-     3. Navigation: Scroll State
-     ---------------------------------------------------------- */
-  function handleNavScroll() {
-    if (window.scrollY > 60) {
-      nav.classList.add("scrolled");
-    } else {
-      nav.classList.remove("scrolled");
-    }
-  }
-
-  window.addEventListener("scroll", handleNavScroll, { passive: true });
-  handleNavScroll(); // Run once on load in case page is already scrolled
-
-  /* ----------------------------------------------------------
-     4. Mobile Menu Toggle
-     ---------------------------------------------------------- */
-  function openMobileMenu() {
-    mobileMenu.classList.add("open");
-    document.body.style.overflow = "hidden";
-    hamburger.setAttribute("aria-expanded", "true");
-  }
-
-  function closeMobileMenu() {
-    mobileMenu.classList.remove("open");
-    document.body.style.overflow = "";
-    hamburger.setAttribute("aria-expanded", "false");
-  }
-
-  function toggleMobileMenu() {
-    if (mobileMenu.classList.contains("open")) {
-      closeMobileMenu();
-    } else {
-      openMobileMenu();
-    }
-  }
-
-  hamburger.addEventListener("click", toggleMobileMenu);
-
-  // Close menu when any mobile nav link is clicked
-  mobileLinks.forEach(function (link) {
-    link.addEventListener("click", closeMobileMenu);
+  // Attach add to cart events
+  document.querySelectorAll(".btn-add").forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      const id = parseInt(btn.dataset.id);
+      const name = btn.dataset.name;
+      const price = parseFloat(btn.dataset.price);
+      addToCart(id, name, price);
+    });
   });
+}
 
-  /* ----------------------------------------------------------
-     5. Cart Drawer Open / Close
-     ---------------------------------------------------------- */
-  function openCart() {
-    cartDrawer.classList.add("open");
-    cartOverlay.classList.add("open");
-    document.body.style.overflow = "hidden";
-    cartDrawer.setAttribute("aria-hidden", "false");
+// Add to Cart
+function addToCart(id, name, price) {
+  const existing = cart.find((item) => item.id === id);
+  if (existing) {
+    existing.quantity += 1;
+  } else {
+    cart.push({ id, name, price, quantity: 1 });
   }
+  saveCart();
+  showToast(`Added ${name} to cart`);
+  updateCartUI();
+}
 
-  function closeCart() {
-    cartDrawer.classList.remove("open");
-    cartOverlay.classList.remove("open");
-    document.body.style.overflow = "";
-    cartDrawer.setAttribute("aria-hidden", "true");
-  }
+// Update Cart UI
+function updateCartUI() {
+  const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+  cartCount.textContent = totalItems;
 
-  cartBtn.addEventListener("click", openCart);
-  cartClose.addEventListener("click", closeCart);
-  cartOverlay.addEventListener("click", closeCart);
-
-  // Allow pressing Escape to close the cart
-  document.addEventListener("keydown", function (e) {
-    if (e.key === "Escape") {
-      if (cartDrawer.classList.contains("open")) closeCart();
-      if (mobileMenu.classList.contains("open")) closeMobileMenu();
-    }
-  });
-
-  /* ----------------------------------------------------------
-     6. Cart Logic: Add, Update Quantity, Remove, Render
-     ---------------------------------------------------------- */
-
-  /* Find a cart item by product name */
-  function findCartItem(name) {
-    return cart.find(function (item) { return item.name === name; });
-  }
-
-  /* Add a product to the cart or increment its quantity */
-  function addToCart(name, price) {
-    var existing = findCartItem(name);
-    if (existing) {
-      existing.qty += 1;
-    } else {
-      cart.push({ name: name, price: parseFloat(price), qty: 1 });
-    }
-    renderCart();
-    updateCartCount();
-    showToast(name + " added to cart");
-  }
-
-  /* Change the quantity of an item by delta (+1 or -1) */
-  function changeQty(name, delta) {
-    var item = findCartItem(name);
-    if (!item) return;
-
-    item.qty += delta;
-    if (item.qty <= 0) {
-      removeFromCart(name);
-    } else {
-      renderCart();
-    }
-    updateCartCount();
-  }
-
-  /* Remove an item from the cart entirely */
-  function removeFromCart(name) {
-    cart = cart.filter(function (item) { return item.name !== name; });
-    renderCart();
-    updateCartCount();
-  }
-
-  /* Calculate and return the cart total as a number */
-  function calculateTotal() {
-    return cart.reduce(function (sum, item) {
-      return sum + item.price * item.qty;
-    }, 0);
-  }
-
-  /* Update the cart badge count in the navbar */
-  function updateCartCount() {
-    var total = cart.reduce(function (sum, item) { return sum + item.qty; }, 0);
-    cartCount.textContent = total;
-  }
-
-  /* Re-render the cart drawer contents */
-  function renderCart() {
-    cartList.innerHTML = "";
-
+  if (cartList) {
     if (cart.length === 0) {
-      var emptyMsg = document.createElement("li");
-      emptyMsg.className = "cart-empty";
-      emptyMsg.textContent = "Your cart is empty.";
-      cartList.appendChild(emptyMsg);
+      cartList.innerHTML =
+        '<div class="cart-empty" style="text-align:center;padding:2rem;color:#6B635C;">Your cart is empty</div>';
       cartTotal.textContent = "$0.00";
       return;
     }
 
-    cart.forEach(function (item) {
-      var li = document.createElement("li");
-      li.className = "cart-item";
+    cartList.innerHTML = cart
+      .map(
+        (item) => `
+      <li class="cart-item">
+        <div class="cart-item__info">
+          <div class="cart-item__name">${item.name}</div>
+          <div class="cart-item__price">$${item.price.toFixed(2)}</div>
+        </div>
+        <div class="cart-item__controls">
+          <button class="cart-item__qty-btn" data-id="${item.id}" data-delta="-1">-</button>
+          <span>${item.quantity}</span>
+          <button class="cart-item__qty-btn" data-id="${item.id}" data-delta="1">+</button>
+          <button class="cart-item__remove" data-id="${item.id}">🗑</button>
+        </div>
+      </li>
+    `,
+      )
+      .join("");
 
-      /* Item info */
-      var infoDiv = document.createElement("div");
-      infoDiv.className = "cart-item__info";
+    const total = cart.reduce(
+      (sum, item) => sum + item.price * item.quantity,
+      0,
+    );
+    cartTotal.textContent = `$${total.toFixed(2)}`;
 
-      var nameEl = document.createElement("span");
-      nameEl.className = "cart-item__name";
-      nameEl.textContent = item.name;
-
-      var priceEl = document.createElement("span");
-      priceEl.className = "cart-item__price";
-      priceEl.textContent = "$" + (item.price * item.qty).toFixed(2);
-
-      infoDiv.appendChild(nameEl);
-      infoDiv.appendChild(priceEl);
-
-      /* Quantity controls */
-      var qtyDiv = document.createElement("div");
-      qtyDiv.className = "cart-item__qty";
-
-      var decBtn = document.createElement("button");
-      decBtn.className = "cart-item__qty-btn";
-      decBtn.textContent = "-";
-      decBtn.setAttribute("aria-label", "Decrease quantity of " + item.name);
-      decBtn.addEventListener("click", function () { changeQty(item.name, -1); });
-
-      var qtyNum = document.createElement("span");
-      qtyNum.className = "cart-item__qty-num";
-      qtyNum.textContent = item.qty;
-
-      var incBtn = document.createElement("button");
-      incBtn.className = "cart-item__qty-btn";
-      incBtn.textContent = "+";
-      incBtn.setAttribute("aria-label", "Increase quantity of " + item.name);
-      incBtn.addEventListener("click", function () { changeQty(item.name, 1); });
-
-      qtyDiv.appendChild(decBtn);
-      qtyDiv.appendChild(qtyNum);
-      qtyDiv.appendChild(incBtn);
-
-      li.appendChild(infoDiv);
-      li.appendChild(qtyDiv);
-      cartList.appendChild(li);
-    });
-
-    /* Update total */
-    cartTotal.textContent = "$" + calculateTotal().toFixed(2);
-  }
-
-  /* Attach add-to-cart click events to all product buttons */
-  addButtons.forEach(function (btn) {
-    btn.addEventListener("click", function () {
-      var name  = btn.getAttribute("data-name");
-      var price = btn.getAttribute("data-price");
-      addToCart(name, price);
-    });
-  });
-
-  /* ----------------------------------------------------------
-     7. Product Filtering by Category
-     ---------------------------------------------------------- */
-  filterButtons.forEach(function (btn) {
-    btn.addEventListener("click", function () {
-      /* Update active state */
-      filterButtons.forEach(function (b) { b.classList.remove("active"); });
-      btn.classList.add("active");
-
-      var filter = btn.getAttribute("data-filter");
-
-      teaCards.forEach(function (card) {
-        var category = card.getAttribute("data-category");
-        if (filter === "all" || category === filter) {
-          card.classList.remove("hidden");
-          /* Staggered reveal for visible cards */
-          card.style.animationDelay = "0s";
-        } else {
-          card.classList.add("hidden");
-        }
+    // Attach cart item events
+    document.querySelectorAll(".cart-item__qty-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const id = parseInt(btn.dataset.id);
+        const delta = parseInt(btn.dataset.delta);
+        updateQuantity(id, delta);
       });
     });
-  });
+    document.querySelectorAll(".cart-item__remove").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const id = parseInt(btn.dataset.id);
+        removeFromCart(id);
+      });
+    });
+  }
+}
 
-  /* ----------------------------------------------------------
-     8. Newsletter Form Submission
-     ---------------------------------------------------------- */
-  newsletterForm.addEventListener("submit", function (e) {
-    e.preventDefault();
-
-    var email = emailInput.value.trim();
-
-    /* Basic email format validation */
-    var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-    if (!emailPattern.test(email)) {
-      setFormMessage("Please enter a valid email address.", "error");
-      return;
+function updateQuantity(id, delta) {
+  const item = cart.find((i) => i.id === id);
+  if (item) {
+    item.quantity += delta;
+    if (item.quantity <= 0) {
+      cart = cart.filter((i) => i.id !== id);
     }
-
-    /* Simulate a successful subscription */
-    setFormMessage("Thank you. You have been added to the list.", "success");
-    emailInput.value = "";
-  });
-
-  /* Set the newsletter form feedback message */
-  function setFormMessage(text, type) {
-    formMessage.textContent = text;
-    formMessage.className = "contact__message " + type;
-
-    /* Clear the message after 5 seconds */
-    setTimeout(function () {
-      formMessage.textContent = "";
-      formMessage.className = "contact__message";
-    }, 5000);
+    saveCart();
+    updateCartUI();
   }
+}
 
-  /* ----------------------------------------------------------
-     9. Toast Notification
-     ---------------------------------------------------------- */
-  function showToast(message) {
-    toast.textContent = message;
-    toast.classList.add("visible");
+function removeFromCart(id) {
+  cart = cart.filter((i) => i.id !== id);
+  saveCart();
+  updateCartUI();
+  showToast("Item removed from cart");
+}
 
-    /* Clear any existing timer before setting a new one */
-    if (toastTimer) clearTimeout(toastTimer);
+function saveCart() {
+  localStorage.setItem("teaCart", JSON.stringify(cart));
+}
 
-    toastTimer = setTimeout(function () {
-      toast.classList.remove("visible");
-      toastTimer = null;
-    }, 2800);
+function showToast(message) {
+  toast.textContent = message;
+  toast.classList.add("show");
+  setTimeout(() => {
+    toast.classList.remove("show");
+  }, 2000);
+}
+
+// Filter functionality
+filterBtns.forEach((btn) => {
+  btn.addEventListener("click", () => {
+    filterBtns.forEach((b) => b.classList.remove("active"));
+    btn.classList.add("active");
+    const filter = btn.dataset.filter;
+    renderTeas(filter);
+  });
+});
+
+// Cart Drawer
+function openCart() {
+  cartDrawer.classList.add("open");
+  cartOverlay.classList.add("open");
+  updateCartUI();
+}
+
+function closeCart() {
+  cartDrawer.classList.remove("open");
+  cartOverlay.classList.remove("open");
+}
+
+cartBtn.addEventListener("click", openCart);
+cartClose.addEventListener("click", closeCart);
+cartOverlay.addEventListener("click", closeCart);
+
+// Mobile Menu
+hamburger.addEventListener("click", () => {
+  mobileMenu.classList.toggle("open");
+});
+document.querySelectorAll(".mobile-menu__link").forEach((link) => {
+  link.addEventListener("click", () => {
+    mobileMenu.classList.remove("open");
+  });
+});
+
+// Newsletter Form
+newsletterForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const email = document.getElementById("emailInput").value;
+  const message = document.getElementById("formMessage");
+  if (email && email.includes("@")) {
+    message.textContent = "Thanks for subscribing! ✨";
+    message.style.color = "#B47C5E";
+    newsletterForm.reset();
+    setTimeout(() => {
+      message.textContent = "";
+    }, 3000);
+  } else {
+    message.textContent = "Please enter a valid email address.";
+    message.style.color = "#c0392b";
   }
+});
 
-  /* ----------------------------------------------------------
-     10. Scroll Reveal Animations
-     ---------------------------------------------------------- */
-
-  /* Apply the reveal class to elements that should animate in */
-  var revealTargets = document.querySelectorAll(
-    ".tea-card, .teas__header, .origin__text, .contact, .section-eyebrow, .section-title"
-  );
-
-  revealTargets.forEach(function (el) {
-    el.classList.add("reveal");
-  });
-
-  /* IntersectionObserver triggers the revealed class when element enters viewport */
-  var revealObserver = new IntersectionObserver(
-    function (entries) {
-      entries.forEach(function (entry) {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("revealed");
-          revealObserver.unobserve(entry.target); // Animate only once
-        }
-      });
-    },
-    { threshold: 0.12 }
-  );
-
-  revealTargets.forEach(function (el) {
-    revealObserver.observe(el);
-  });
-
-  /* ----------------------------------------------------------
-     11. Smooth Anchor Navigation (offset for fixed nav)
-     ---------------------------------------------------------- */
-  document.querySelectorAll('a[href^="#"]').forEach(function (anchor) {
-    anchor.addEventListener("click", function (e) {
-      var targetId = anchor.getAttribute("href");
-      if (targetId === "#") return;
-
-      var targetEl = document.querySelector(targetId);
-      if (!targetEl) return;
-
+// Smooth scroll for anchor links
+document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+  anchor.addEventListener("click", function (e) {
+    const href = this.getAttribute("href");
+    if (href === "#") return;
+    const target = document.querySelector(href);
+    if (target) {
       e.preventDefault();
-
-      var navHeight = nav.offsetHeight;
-      var targetTop = targetEl.getBoundingClientRect().top + window.scrollY - navHeight - 16;
-
-      window.scrollTo({ top: targetTop, behavior: "smooth" });
-    });
+      target.scrollIntoView({ behavior: "smooth" });
+    }
   });
+});
 
-  /* ----------------------------------------------------------
-     12. Initial Cart Render
-     ---------------------------------------------------------- */
-  renderCart(); // Render the empty cart state on page load
+// Navbar scroll effect
+window.addEventListener("scroll", () => {
+  const nav = document.getElementById("nav");
+  if (window.scrollY > 50) {
+    nav.style.boxShadow = "0 2px 10px rgba(0,0,0,0.05)";
+  } else {
+    nav.style.boxShadow = "none";
+  }
+});
 
-})();
+// Initialize
+renderTeas("all");
+updateCartUI();
