@@ -1,362 +1,222 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Aroma — Artisan Tea House</title>
-  <link rel="stylesheet" href="style.css" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Aroma — Artisan Tea House</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- Navigation Bar -->
+    <nav class="nav" id="nav">
+      <div class="nav__logo">Aroma</div>
+      <ul class="nav__links">
+        <li><a href="#hero" class="nav__link">Home</a></li>
+        <li><a href="#teas" class="nav__link">Teas</a></li>
+        <li><a href="#origin" class="nav__link">Origin</a></li>
+        <li><a href="#contact" class="nav__link">Contact</a></li>
+      </ul>
+      <button class="nav__cart" id="cartBtn" aria-label="Open cart">
+        Cart <span class="nav__cart-count" id="cartCount">0</span>
+      </button>
+      <button class="nav__hamburger" id="hamburger" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+    </nav>
 
-  <!-- Navigation Bar -->
-  <nav class="nav" id="nav">
-    <div class="nav__logo">Aroma</div>
-    <ul class="nav__links">
-      <li><a href="#hero" class="nav__link">Home</a></li>
-      <li><a href="#teas" class="nav__link">Teas</a></li>
-      <li><a href="#origin" class="nav__link">Origin</a></li>
-      <li><a href="#contact" class="nav__link">Contact</a></li>
-    </ul>
-    <button class="nav__cart" id="cartBtn" aria-label="Open cart">
-      Cart <span class="nav__cart-count" id="cartCount">0</span>
-    </button>
-    <button class="nav__hamburger" id="hamburger" aria-label="Open menu">
-      <span></span><span></span><span></span>
-    </button>
-  </nav>
-
-  <!-- Mobile Menu -->
-  <div class="mobile-menu" id="mobileMenu">
-    <ul>
-      <li><a href="#hero" class="mobile-menu__link">Home</a></li>
-      <li><a href="#teas" class="mobile-menu__link">Teas</a></li>
-      <li><a href="#origin" class="mobile-menu__link">Origin</a></li>
-      <li><a href="#contact" class="mobile-menu__link">Contact</a></li>
-    </ul>
-  </div>
-
-  <!-- Hero Section -->
-  <section class="hero" id="hero">
-    <div class="hero__bg-text">TEA</div>
-    <div class="hero__content">
-      <p class="hero__eyebrow">Est. 2018 — Curated Teas</p>
-      <h1 class="hero__title">
-        The Art of<br /><em>Stillness</em><br />in Every Cup
-      </h1>
-      <p class="hero__subtitle">
-        Sourced from ancient gardens. Steeped in tradition. Delivered to you.
-      </p>
-      <div class="hero__actions">
-        <a href="#teas" class="btn btn--primary">Shop Collection</a>
-        <a href="#origin" class="btn btn--ghost">Our Story</a>
-      </div>
-    </div>
-    <div class="hero__scroll-hint">
-      <span>Scroll</span>
-      <div class="hero__scroll-line"></div>
-    </div>
-  </section>
-
-  <!-- Marquee Strip -->
-  <div class="marquee-strip" aria-hidden="true">
-    <div class="marquee-strip__track">
-      <span>Matcha</span><span class="dot">&#183;</span>
-      <span>Oolong</span><span class="dot">&#183;</span>
-      <span>Sencha</span><span class="dot">&#183;</span>
-      <span>Pu-erh</span><span class="dot">&#183;</span>
-      <span>Chamomile</span><span class="dot">&#183;</span>
-      <span>Earl Grey</span><span class="dot">&#183;</span>
-      <span>Gyokuro</span><span class="dot">&#183;</span>
-      <span>Darjeeling</span><span class="dot">&#183;</span>
-      <span>Matcha</span><span class="dot">&#183;</span>
-      <span>Oolong</span><span class="dot">&#183;</span>
-      <span>Sencha</span><span class="dot">&#183;</span>
-      <span>Pu-erh</span><span class="dot">&#183;</span>
-      <span>Chamomile</span><span class="dot">&#183;</span>
-      <span>Earl Grey</span><span class="dot">&#183;</span>
-      <span>Gyokuro</span><span class="dot">&#183;</span>
-      <span>Darjeeling</span><span class="dot">&#183;</span>
-    </div>
-  </div>
-
-  <!-- Tea Collection Section -->
-  <section class="teas" id="teas">
-    <div class="teas__header">
-      <p class="section-eyebrow">The Collection</p>
-      <h2 class="section-title">Curated Varieties</h2>
-      <p class="section-subtitle">
-        Each tea tells a story of its land, its season, and the hands that harvested it.
-      </p>
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+      <ul>
+        <li><a href="#hero" class="mobile-menu__link">Home</a></li>
+        <li><a href="#teas" class="mobile-menu__link">Teas</a></li>
+        <li><a href="#origin" class="mobile-menu__link">Origin</a></li>
+        <li><a href="#contact" class="mobile-menu__link">Contact</a></li>
+      </ul>
     </div>
 
-    <!-- Filter Buttons -->
-    <div class="teas__filters" id="filterButtons">
-      <button class="filter-btn active" data-filter="all">All</button>
-      <button class="filter-btn" data-filter="green">Green</button>
-      <button class="filter-btn" data-filter="black">Black</button>
-      <button class="filter-btn" data-filter="herbal">Herbal</button>
-      <button class="filter-btn" data-filter="aged">Aged</button>
-    </div>
-
-    <!-- Product Grid -->
-    <div class="teas__grid" id="teaGrid">
-
-      <!-- Matcha -->
-      <article class="tea-card" data-category="green">
-        <div class="tea-card__img-wrap">
-          <div class="tea-card__img tea-card__img--matcha"></div>
-          <span class="tea-card__badge">Bestseller</span>
-        </div>
-        <div class="tea-card__body">
-          <p class="tea-card__origin">Uji, Japan</p>
-          <h3 class="tea-card__name">Ceremonial Matcha</h3>
-          <p class="tea-card__desc">
-            Stone-ground from shade-grown tencha. Vivid umami with a smooth, lingering finish.
-          </p>
-          <div class="tea-card__footer">
-            <span class="tea-card__price">$28.00</span>
-            <button class="btn-add" data-name="Ceremonial Matcha" data-price="28.00">Add to Cart</button>
-          </div>
-        </div>
-      </article>
-
-      <!-- Oolong -->
-      <article class="tea-card" data-category="green">
-        <div class="tea-card__img-wrap">
-          <div class="tea-card__img tea-card__img--oolong"></div>
-        </div>
-        <div class="tea-card__body">
-          <p class="tea-card__origin">Wuyi Mountains, China</p>
-          <h3 class="tea-card__name">Rock Oolong</h3>
-          <p class="tea-card__desc">
-            Aged on mineral-rich cliffs. Deep roasted notes with a honeyed, floral sweetness.
-          </p>
-          <div class="tea-card__footer">
-            <span class="tea-card__price">$34.00</span>
-            <button class="btn-add" data-name="Rock Oolong" data-price="34.00">Add to Cart</button>
-          </div>
-        </div>
-      </article>
-
-      <!-- Sencha -->
-      <article class="tea-card" data-category="green">
-        <div class="tea-card__img-wrap">
-          <div class="tea-card__img tea-card__img--sencha"></div>
-          <span class="tea-card__badge">New</span>
-        </div>
-        <div class="tea-card__body">
-          <p class="tea-card__origin">Shizuoka, Japan</p>
-          <h3 class="tea-card__name">First Flush Sencha</h3>
-          <p class="tea-card__desc">
-            Harvested in early spring. Crisp, grassy brightness with a clean, refreshing finish.
-          </p>
-          <div class="tea-card__footer">
-            <span class="tea-card__price">$22.00</span>
-            <button class="btn-add" data-name="First Flush Sencha" data-price="22.00">Add to Cart</button>
-          </div>
-        </div>
-      </article>
-
-      <!-- Pu-erh -->
-      <article class="tea-card" data-category="aged">
-        <div class="tea-card__img-wrap">
-          <div class="tea-card__img tea-card__img--puerh"></div>
-        </div>
-        <div class="tea-card__body">
-          <p class="tea-card__origin">Yunnan, China</p>
-          <h3 class="tea-card__name">Vintage Pu-erh</h3>
-          <p class="tea-card__desc">
-            Aged for ten years in humid caves. Earthy, deep, and profoundly complex.
-          </p>
-          <div class="tea-card__footer">
-            <span class="tea-card__price">$48.00</span>
-            <button class="btn-add" data-name="Vintage Pu-erh" data-price="48.00">Add to Cart</button>
-          </div>
-        </div>
-      </article>
-
-      <!-- Chamomile -->
-      <article class="tea-card" data-category="herbal">
-        <div class="tea-card__img-wrap">
-          <div class="tea-card__img tea-card__img--chamomile"></div>
-        </div>
-        <div class="tea-card__body">
-          <p class="tea-card__origin">Thessaly, Greece</p>
-          <h3 class="tea-card__name">Wild Chamomile</h3>
-          <p class="tea-card__desc">
-            Hand-picked from mountain meadows. Soft apple notes with a calming, gentle warmth.
-          </p>
-          <div class="tea-card__footer">
-            <span class="tea-card__price">$18.00</span>
-            <button class="btn-add" data-name="Wild Chamomile" data-price="18.00">Add to Cart</button>
-          </div>
-        </div>
-      </article>
-
-      <!-- Earl Grey -->
-      <article class="tea-card" data-category="black">
-        <div class="tea-card__img-wrap">
-          <div class="tea-card__img tea-card__img--earlgrey"></div>
-        </div>
-        <div class="tea-card__body">
-          <p class="tea-card__origin">Assam, India</p>
-          <h3 class="tea-card__name">Earl Grey Reserve</h3>
-          <p class="tea-card__desc">
-            Bold Assam base infused with hand-pressed bergamot oil. Aromatic and full-bodied.
-          </p>
-          <div class="tea-card__footer">
-            <span class="tea-card__price">$24.00</span>
-            <button class="btn-add" data-name="Earl Grey Reserve" data-price="24.00">Add to Cart</button>
-          </div>
-        </div>
-      </article>
-
-      <!-- Gyokuro -->
-      <article class="tea-card" data-category="green">
-        <div class="tea-card__img-wrap">
-          <div class="tea-card__img tea-card__img--gyokuro"></div>
-          <span class="tea-card__badge">Rare</span>
-        </div>
-        <div class="tea-card__body">
-          <p class="tea-card__origin">Yame, Japan</p>
-          <h3 class="tea-card__name">Gyokuro Shade</h3>
-          <p class="tea-card__desc">
-            Shaded for six weeks before harvest. Intensely sweet with a deep, savory character.
-          </p>
-          <div class="tea-card__footer">
-            <span class="tea-card__price">$52.00</span>
-            <button class="btn-add" data-name="Gyokuro Shade" data-price="52.00">Add to Cart</button>
-          </div>
-        </div>
-      </article>
-
-      <!-- Darjeeling -->
-      <article class="tea-card" data-category="black">
-        <div class="tea-card__img-wrap">
-          <div class="tea-card__img tea-card__img--darjeeling"></div>
-        </div>
-        <div class="tea-card__body">
-          <p class="tea-card__origin">Darjeeling, India</p>
-          <h3 class="tea-card__name">Darjeeling Second Flush</h3>
-          <p class="tea-card__desc">
-            The champagne of teas. Muscatel grape notes with a bright, lingering complexity.
-          </p>
-          <div class="tea-card__footer">
-            <span class="tea-card__price">$38.00</span>
-            <button class="btn-add" data-name="Darjeeling Second Flush" data-price="38.00">Add to Cart</button>
-          </div>
-        </div>
-      </article>
-
-    </div>
-  </section>
-
-  <!-- Origin / Story Section -->
-  <section class="origin" id="origin">
-    <div class="origin__text">
-      <p class="section-eyebrow">Our Philosophy</p>
-      <h2 class="section-title">From Garden<br /><em>to Cup</em></h2>
-      <p class="origin__body">
-        We partner directly with small-scale farms across Japan, China, India, and Greece.
-        Every harvest is traceable, every relationship long-standing. No middlemen.
-        No compromises. Only tea as it was meant to be — singular and alive.
-      </p>
-      <div class="origin__stats">
-        <div class="origin__stat">
-          <span class="origin__stat-number">12</span>
-          <span class="origin__stat-label">Partner Farms</span>
-        </div>
-        <div class="origin__stat">
-          <span class="origin__stat-number">6</span>
-          <span class="origin__stat-label">Countries</span>
-        </div>
-        <div class="origin__stat">
-          <span class="origin__stat-number">40+</span>
-          <span class="origin__stat-label">Varieties</span>
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+      <div class="hero__bg-text">TEA</div>
+      <div class="hero__content">
+        <p class="hero__eyebrow">Est. 2026 — Curated Teas</p>
+        <h1 class="hero__title">
+          The Art of<br /><em>Stillness</em><br />in Every Cup
+        </h1>
+        <p class="hero__subtitle">
+          Sourced from different gardens. Steeped in tradition. Delivered to
+          you.
+        </p>
+        <div class="hero__actions">
+          <a href="#teas" class="btn btn--primary">Shop Collection</a>
+          <a href="#origin" class="btn btn--ghost">Our Story</a>
         </div>
       </div>
+      <div class="hero__scroll-hint">
+        <span>Scroll</span>
+        <div class="hero__scroll-line"></div>
+      </div>
+    </section>
+
+    <!-- Marquee Strip -->
+    <div class="marquee-strip" aria-hidden="true">
+      <div class="marquee-strip__track">
+        <span>Matcha</span><span class="dot">&#183;</span> <span>Oolong</span
+        ><span class="dot">&#183;</span> <span>Sencha</span
+        ><span class="dot">&#183;</span> <span>Pu-erh</span
+        ><span class="dot">&#183;</span> <span>Chamomile</span
+        ><span class="dot">&#183;</span> <span>Earl Grey</span
+        ><span class="dot">&#183;</span> <span>Gyokuro</span
+        ><span class="dot">&#183;</span> <span>Darjeeling</span
+        ><span class="dot">&#183;</span> <span>Matcha</span
+        ><span class="dot">&#183;</span> <span>Oolong</span
+        ><span class="dot">&#183;</span> <span>Sencha</span
+        ><span class="dot">&#183;</span> <span>Pu-erh</span
+        ><span class="dot">&#183;</span> <span>Chamomile</span
+        ><span class="dot">&#183;</span> <span>Earl Grey</span
+        ><span class="dot">&#183;</span> <span>Gyokuro</span
+        ><span class="dot">&#183;</span> <span>Darjeeling</span
+        ><span class="dot">&#183;</span>
+      </div>
     </div>
-    <div class="origin__visual">
-      <div class="origin__visual-inner">
-        <div class="origin__circle origin__circle--1"></div>
-        <div class="origin__circle origin__circle--2"></div>
-        <div class="origin__circle origin__circle--3"></div>
-        <p class="origin__quote">
-          <em>"The best tea is the one that connects you to the moment."</em>
+
+    <!-- Tea Collection Section -->
+    <section class="teas" id="teas">
+      <div class="teas__header">
+        <p class="section-eyebrow">The Collection</p>
+        <h2 class="section-title">Curated Varieties</h2>
+        <p class="section-subtitle">
+          Each tea tells a story of its land, its season, and the hands that
+          harvested it.
         </p>
       </div>
-    </div>
-  </section>
 
-  <!-- Newsletter / Contact Section -->
-  <section class="contact" id="contact">
-    <p class="section-eyebrow">Stay Close</p>
-    <h2 class="section-title">Join the Circle</h2>
-    <p class="contact__subtitle">
-      New harvests, seasonal guides, and quiet stories — delivered to your inbox.
-    </p>
-    <form class="contact__form" id="newsletterForm" novalidate>
-      <div class="contact__field-wrap">
-        <input
-          type="email"
-          class="contact__input"
-          id="emailInput"
-          placeholder="your@email.com"
-          required
-          aria-label="Email address"
-        />
-        <button type="submit" class="btn btn--primary">Subscribe</button>
+      <!-- Filter Buttons -->
+      <div class="teas__filters" id="filterButtons">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="green">Green</button>
+        <button class="filter-btn" data-filter="black">Black</button>
+        <button class="filter-btn" data-filter="herbal">Herbal</button>
+        <button class="filter-btn" data-filter="aged">Aged</button>
       </div>
-      <p class="contact__message" id="formMessage" aria-live="polite"></p>
-    </form>
-  </section>
 
-  <!-- Footer -->
-  <footer class="footer">
-    <div class="footer__top">
-      <div class="footer__brand">
-        <p class="footer__logo">Aroma</p>
-        <p class="footer__tagline">Artisan Tea House</p>
+      <!-- Product Grid -->
+      <div class="teas__grid" id="teaGrid"></div>
+    </section>
+
+    <!-- Origin / Story Section -->
+    <section class="origin" id="origin">
+      <div class="origin__text">
+        <p class="section-eyebrow">Our Philosophy</p>
+        <h2 class="section-title">From Garden<br /><em>to Cup</em></h2>
+        <p class="origin__body">
+          We partner directly with small farms across Japan, China, India, and
+          Greece. Every harvest is traceable, every relationship long-standing.
+          No middlemen. No compromises. Only tea as it was meant to be singular
+          and alive.
+        </p>
+        <div class="origin__stats">
+          <div class="origin__stat">
+            <span class="origin__stat-number">12</span>
+            <span class="origin__stat-label">Partner Farms</span>
+          </div>
+          <div class="origin__stat">
+            <span class="origin__stat-number">6</span>
+            <span class="origin__stat-label">Countries</span>
+          </div>
+          <div class="origin__stat">
+            <span class="origin__stat-number">40+</span>
+            <span class="origin__stat-label">Varieties</span>
+          </div>
+        </div>
       </div>
-      <nav class="footer__nav" aria-label="Footer navigation">
-        <ul>
-          <li><a href="#teas">Collection</a></li>
-          <li><a href="#origin">Story</a></li>
-          <li><a href="#contact">Contact</a></li>
-          <li><a href="#">Privacy</a></li>
-        </ul>
-      </nav>
-    </div>
-    <div class="footer__bottom">
-      <p>2025 Aroma Tea House. All rights reserved.</p>
-    </div>
-  </footer>
-
-  <!-- Cart Drawer -->
-  <div class="cart-overlay" id="cartOverlay"></div>
-  <aside class="cart-drawer" id="cartDrawer" aria-label="Shopping cart" role="dialog" aria-modal="true">
-    <div class="cart-drawer__header">
-      <h2 class="cart-drawer__title">Your Cart</h2>
-      <button class="cart-drawer__close" id="cartClose" aria-label="Close cart">&#215;</button>
-    </div>
-    <ul class="cart-drawer__list" id="cartList">
-      <!-- Cart items are injected by JS -->
-    </ul>
-    <div class="cart-drawer__footer">
-      <div class="cart-drawer__total">
-        <span>Total</span>
-        <span id="cartTotal">$0.00</span>
+      <div class="origin__visual">
+        <div class="origin__visual-inner"></div>
       </div>
-      <button class="btn btn--primary cart-drawer__checkout">Checkout</button>
-    </div>
-  </aside>
+    </section>
 
-  <!-- Toast Notification -->
-  <div class="toast" id="toast" aria-live="polite"></div>
+    <!-- Newsletter / Contact Section -->
+    <section class="contact" id="contact">
+      <p class="section-eyebrow">Stay Close</p>
+      <h2 class="section-title">Join the Circle</h2>
+      <p class="contact__subtitle">
+        New harvests, seasonal guides, and quiet stories delivered to your
+        inbox.
+      </p>
+      <form class="contact__form" id="newsletterForm" novalidate>
+        <div class="contact__field-wrap">
+          <input
+            type="email"
+            class="contact__input"
+            id="emailInput"
+            placeholder="your@email.com"
+            required
+            aria-label="Email address"
+          />
+          <button type="submit" class="btn btn--primary">Subscribe</button>
+        </div>
+        <p class="contact__message" id="formMessage" aria-live="polite"></p>
+      </form>
+    </section>
 
-  <script src="script.js"></script>
-</body>
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footer__top">
+        <div class="footer__brand">
+          <p class="footer__logo">Aroma</p>
+          <p class="footer__tagline">Artisan Tea House</p>
+        </div>
+        <nav class="footer__nav" aria-label="Footer navigation">
+          <ul>
+            <li><a href="#teas">Collection</a></li>
+            <li><a href="#origin">Story</a></li>
+            <li><a href="#contact">Contact</a></li>
+            <li><a href="#">Privacy</a></li>
+          </ul>
+        </nav>
+      </div>
+      <div class="footer__bottom">
+        <p>2025 Aroma Tea House. All rights reserved. Aljuice 2026</p>
+      </div>
+    </footer>
+
+    <!-- Cart Drawer -->
+    <div class="cart-overlay" id="cartOverlay"></div>
+    <aside
+      class="cart-drawer"
+      id="cartDrawer"
+      aria-label="Shopping cart"
+      role="dialog"
+      aria-modal="true"
+    >
+      <div class="cart-drawer__header">
+        <h2 class="cart-drawer__title">Your Cart</h2>
+        <button
+          class="cart-drawer__close"
+          id="cartClose"
+          aria-label="Close cart"
+        >
+          &#215;
+        </button>
+      </div>
+      <ul class="cart-drawer__list" id="cartList"></ul>
+      <div class="cart-drawer__footer">
+        <div class="cart-drawer__total">
+          <span>Total</span>
+          <span id="cartTotal">$0.00</span>
+        </div>
+        <button class="btn btn--primary cart-drawer__checkout">Checkout</button>
+      </div>
+    </aside>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast" aria-live="polite"></div>
+
+    <script src="script.js"></script>
+  </body>
 </html>
